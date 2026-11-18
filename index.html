@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Аналитический дашборд продаж</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .metric-card {
+      background: var(--card, #ffffff);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+    .chart-container {
+      background: var(--card, #ffffff);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-[var(--background,#f9fafb)] text-[var(--foreground,#111827)] font-sans antialiased p-6">
+  <div class="max-w-7xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[var(--border,#e5e7eb)] gap-4">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-[var(--foreground,#111827)]">Дашборд эффективности продаж и покупателей</h1>
+        <p class="text-sm text-[var(--muted-foreground,#6b7280)] mt-1">Аналитический срез торговой площадки (сентябрь — декабрь 1992 г.)</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+          ● 6 отчетов загружено
+        </span>
+        <a href="https://docs.google.com/spreadsheets/d/1k1-KheArmTMTv39Ert2EmaCrr18Gl5ZAPUTLMWJptC8/edit" target="_blank" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+          Google Sheets Таблица ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- KPI Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="metric-card">
+        <div class="text-xs font-medium text-[var(--muted-foreground,#6b7280)] uppercase tracking-wider">Общая выручка</div>
+        <div class="mt-2 text-2xl font-bold text-blue-600">26,72 млрд ₽</div>
+        <div class="mt-1 text-xs text-[var(--muted-foreground,#6b7280)]">26 716 587 613 ₽ за 4 месяца</div>
+      </div>
+      <div class="metric-card">
+        <div class="text-xs font-medium text-[var(--muted-foreground,#6b7280)] uppercase tracking-wider">Всего покупателей</div>
+        <div class="mt-2 text-2xl font-bold text-indigo-600">19 759</div>
+        <div class="mt-1 text-xs text-[var(--muted-foreground,#6b7280)]">60.5% аудитории — возраст 40+</div>
+      </div>
+      <div class="metric-card">
+        <div class="text-xs font-medium text-[var(--muted-foreground,#6b7280)] uppercase tracking-wider">Лучший продавец</div>
+        <div class="mt-2 text-2xl font-bold text-emerald-600">Dirk Stringer</div>
+        <div class="mt-1 text-xs text-[var(--muted-foreground,#6b7280)]">4,93 млрд ₽ (4 192 сделки)</div>
+      </div>
+      <div class="metric-card">
+        <div class="text-xs font-medium text-[var(--muted-foreground,#6b7280)] uppercase tracking-wider">Акционные первые покупки</div>
+        <div class="mt-2 text-2xl font-bold text-amber-600">15 чел.</div>
+        <div class="mt-1 text-xs text-[var(--muted-foreground,#6b7280)]">Товары по акции (цена 0 ₽)</div>
+      </div>
+    </div>
+
+    <!-- Row 1: Top 10 Sellers & Monthly Trend -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Chart 1: Top 10 Sellers -->
+      <div class="chart-container">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-[var(--foreground,#111827)]">Топ-10 продавцов по выручке</h2>
+          <span class="text-xs text-[var(--muted-foreground,#6b7280)]">млрд ₽</span>
+        </div>
+        <div id="chart-top-sellers" class="space-y-2"></div>
+      </div>
+
+      <!-- Chart 2: Monthly Dynamics -->
+      <div class="chart-container">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-[var(--foreground,#111827)]">Динамика выручки и клиентов по месяцам</h2>
+          <span class="text-xs text-[var(--muted-foreground,#6b7280)]">1992 г.</span>
+        </div>
+        <div id="chart-monthly" class="space-y-4 pt-2"></div>
+      </div>
+    </div>
+
+    <!-- Row 2: Age Demographics & Day of Week -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Chart 3: Age Groups -->
+      <div class="chart-container">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-[var(--foreground,#111827)]">Распределение покупателей по возрасту</h2>
+          <span class="text-xs text-[var(--muted-foreground,#6b7280)]">Всего: 19 759 чел.</span>
+        </div>
+        <div id="chart-age-groups" class="space-y-4 pt-2"></div>
+      </div>
+
+      <!-- Chart 4: Day of Week -->
+      <div class="chart-container">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-[var(--foreground,#111827)]">Выручка по дням недели</h2>
+          <span class="text-xs text-[var(--muted-foreground,#6b7280)]">млрд ₽</span>
+        </div>
+        <div id="chart-dow" class="space-y-2.5 pt-2"></div>
+      </div>
+    </div>
+
+    <!-- Row 3: Underperforming Sellers & Special Offer Table -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Underperforming sellers -->
+      <div class="chart-container">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-semibold text-[var(--foreground,#111827)]">Продавцы с выручкой за сделку ниже средней</h2>
+          <span class="text-xs text-rose-500 font-medium">15 сотрудников</span>
+        </div>
+        <p class="text-xs text-[var(--muted-foreground,#6b7280)] mb-3">Показатель средней выручки за сделку (в рублях) требует внимания руководства</p>
+        <div class="overflow-x-auto max-h-72">
+          <table class="min-w-full text-xs">
+            <thead class="bg-[var(--secondary,#f3f4f6)] text-[var(--muted-foreground,#4b5563)] sticky top-0">
+              <tr>
+                <th class="py-2 px-3 text-left font-semibold">Продавец</th>
+                <th class="py-2 px-3 text-right font-semibold">Средняя выручка за сделку</th>
+              </tr>
+            </thead>
+            <tbody id="table-low" class="divide-y divide-[var(--border,#e5e7eb)]"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Special Offer Table -->
+      <div class="chart-container">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-semibold text-[var(--foreground,#111827)]">Первые покупки по акции (цена = 0 ₽)</h2>
+          <span class="text-xs text-amber-600 font-medium">15 покупателей</span>
+        </div>
+        <p class="text-xs text-[var(--muted-foreground,#6b7280)] mb-3">Клиенты, привлеченные промо-акцией в сентябре 1992 г.</p>
+        <div class="overflow-x-auto max-h-72">
+          <table class="min-w-full text-xs">
+            <thead class="bg-[var(--secondary,#f3f4f6)] text-[var(--muted-foreground,#4b5563)] sticky top-0">
+              <tr>
+                <th class="py-2 px-3 text-left font-semibold">Покупатель</th>
+                <th class="py-2 px-3 text-left font-semibold">Дата покупки</th>
+                <th class="py-2 px-3 text-left font-semibold">Продавец</th>
+              </tr>
+            </thead>
+            <tbody id="table-offer" class="divide-y divide-[var(--border,#e5e7eb)]"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const topData = [{"seller": "Dirk Stringer", "operations": 4192, "income": 4925137932}, {"seller": "Michel DeFrance", "operations": 4688, "income": 3260240833}, {"seller": "Albert Ringer", "operations": 4695, "income": 2700327941}, {"seller": "Heather McBadden", "operations": 4139, "income": 1873192318}, {"seller": "Innes del Castillo", "operations": 4674, "income": 1762202127}, {"seller": "Abraham Bennet", "operations": 9460, "income": 1617501169}, {"seller": "Dean Straight", "operations": 4195, "income": 1256032202}, {"seller": "Livia Karsen", "operations": 2564, "income": 1056902108}, {"seller": "Sheryl Hunter", "operations": 4686, "income": 1056767862}, {"seller": "Michael O'Leary", "operations": 5757, "income": 927500459}];
+    const lowData = [{"seller": "Stearns MacFeather", "average_income": 46407}, {"seller": "Ann Dull", "average_income": 55090}, {"seller": "Morningstar Greene", "average_income": 88124}, {"seller": "Marjorie Green", "average_income": 109395}, {"seller": "Johnson White", "average_income": 126133}, {"seller": "Anne Ringer", "average_income": 136767}, {"seller": "Cheryl Carson", "average_income": 139818}, {"seller": "Reginald Blotchet-Halls", "average_income": 151773}, {"seller": "Charlene Locksley", "average_income": 152007}, {"seller": "Michael O'Leary", "average_income": 161108}, {"seller": "Burt Gringlesby", "average_income": 167993}, {"seller": "Abraham Bennet", "average_income": 170983}, {"seller": "Sylvia Panteley", "average_income": 179517}, {"seller": "Meander Smith", "average_income": 188075}, {"seller": "Sheryl Hunter", "average_income": 225515}];
+    const dowData = [{"day_of_week": "monday", "income": 3977392047}, {"day_of_week": "tuesday", "income": 3992938526}, {"day_of_week": "wednesday", "income": 3658986628}, {"day_of_week": "thursday", "income": 3846657050}, {"day_of_week": "friday", "income": 3766287273}, {"day_of_week": "saturday", "income": 3759951182}, {"day_of_week": "sunday", "income": 3714374835}];
+    const ageData = [{"age_category": "16-25", "age_count": 2663}, {"age_category": "26-40", "age_count": 5139}, {"age_category": "40+", "age_count": 11957}];
+    const monthData = [{"selling_month": "1992-09", "total_customers": 226, "income": 2618930332}, {"selling_month": "1992-10", "total_customers": 230, "income": 8358113698}, {"selling_month": "1992-11", "total_customers": 228, "income": 8031353737}, {"selling_month": "1992-12", "total_customers": 229, "income": 7708189846}];
+    const offerData = [{"customer": "Cristina Xu", "sale_date": "1992-09-21", "seller": "Abraham Bennet"}, {"customer": "Jacob Martinez", "sale_date": "1992-09-21", "seller": "Michael O'Leary"}, {"customer": "Jared Gray", "sale_date": "1992-09-22", "seller": "Dirk Stringer"}, {"customer": "Kaitlyn Allen", "sale_date": "1992-09-21", "seller": "Dirk Stringer"}, {"customer": "Karen Huang", "sale_date": "1992-09-21", "seller": "Dirk Stringer"}, {"customer": "Krista Gill", "sale_date": "1992-09-22", "seller": "Marjorie Green"}, {"customer": "Kristen Li", "sale_date": "1992-09-21", "seller": "Michael O'Leary"}, {"customer": "Levi Gonzalez", "sale_date": "1992-09-21", "seller": "Marjorie Green"}, {"customer": "Mario Rai", "sale_date": "1992-09-21", "seller": "Abraham Bennet"}, {"customer": "Mya Coleman", "sale_date": "1992-09-24", "seller": "Michael O'Leary"}, {"customer": "Olivia Bennett", "sale_date": "1992-09-21", "seller": "Michael O'Leary"}, {"customer": "Richard Martinez", "sale_date": "1992-09-21", "seller": "Abraham Bennet"}, {"customer": "Samuel Sharma", "sale_date": "1992-09-22", "seller": "Michael O'Leary"}, {"customer": "Tyrone Ruiz", "sale_date": "1992-09-21", "seller": "Marjorie Green"}, {"customer": "Willie Gao", "sale_date": "1992-09-22", "seller": "Michael O'Leary"}];
+
+    // 1. Render Top Sellers
+    const topContainer = document.getElementById('chart-top-sellers');
+    const maxTopIncome = Math.max(...topData.map(d => d.income));
+    topData.forEach((item, idx) => {
+      const pct = (item.income / maxTopIncome * 100).toFixed(1);
+      const valBn = (item.income / 1e9).toFixed(2);
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-3 text-xs';
+      div.innerHTML = `
+        <span class="w-5 font-bold text-[var(--muted-foreground,#6b7280)]">${idx + 1}</span>
+        <span class="w-36 font-medium truncate">${item.seller}</span>
+        <div class="flex-1 bg-[var(--secondary,#e5e7eb)] rounded-full h-3 overflow-hidden">
+          <div class="bg-blue-600 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+        </div>
+        <span class="w-16 text-right font-semibold">${valBn} млрд</span>
+        <span class="w-14 text-right text-[var(--muted-foreground,#6b7280)]">${item.operations} опер.</span>
+      `;
+      topContainer.appendChild(div);
+    });
+
+    // 2. Render Monthly
+    const monthContainer = document.getElementById('chart-monthly');
+    const maxMonthIncome = Math.max(...monthData.map(d => d.income));
+    monthData.forEach(item => {
+      const pct = (item.income / maxMonthIncome * 100).toFixed(1);
+      const valBn = (item.income / 1e9).toFixed(2);
+      const div = document.createElement('div');
+      div.className = 'space-y-1 text-xs';
+      div.innerHTML = `
+        <div class="flex justify-between font-medium">
+          <span class="font-semibold">${item.selling_month}</span>
+          <span>${valBn} млрд ₽ <span class="text-[var(--muted-foreground,#6b7280)]">(${item.total_customers} клиентов)</span></span>
+        </div>
+        <div class="bg-[var(--secondary,#e5e7eb)] rounded-full h-3 overflow-hidden">
+          <div class="bg-indigo-600 h-full rounded-full" style="width: ${pct}%"></div>
+        </div>
+      `;
+      monthContainer.appendChild(div);
+    });
+
+    // 3. Render Age Groups
+    const ageContainer = document.getElementById('chart-age-groups');
+    const totalAge = ageData.reduce((acc, curr) => acc + curr.age_count, 0);
+    const colors = ['bg-amber-500', 'bg-blue-500', 'bg-emerald-600'];
+    ageData.forEach((item, idx) => {
+      const pct = (item.age_count / totalAge * 100).toFixed(1);
+      const div = document.createElement('div');
+      div.className = 'space-y-1 text-xs';
+      div.innerHTML = `
+        <div class="flex justify-between font-medium">
+          <span class="font-semibold">Возраст ${item.age_category}</span>
+          <span>${item.age_count.toLocaleString()} чел. <span class="text-[var(--muted-foreground,#6b7280)]">(${pct}%)</span></span>
+        </div>
+        <div class="bg-[var(--secondary,#e5e7eb)] rounded-full h-3.5 overflow-hidden">
+          <div class="${colors[idx % colors.length]} h-full rounded-full" style="width: ${pct}%"></div>
+        </div>
+      `;
+      ageContainer.appendChild(div);
+    });
+
+    // 4. Render Day of Week
+    const dowContainer = document.getElementById('chart-dow');
+    const maxDow = Math.max(...dowData.map(d => d.income));
+    const dayNamesRu = {
+      monday: 'Понедельник',
+      tuesday: 'Вторник',
+      wednesday: 'Среда',
+      thursday: 'Четверг',
+      friday: 'Пятница',
+      saturday: 'Суббота',
+      sunday: 'Воскресенье'
+    };
+    dowData.forEach(item => {
+      const dKey = item.day_of_week.toLowerCase().trim();
+      const ruName = dayNamesRu[dKey] || item.day_of_week;
+      const pct = (item.income / maxDow * 100).toFixed(1);
+      const valBn = (item.income / 1e9).toFixed(2);
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-3 text-xs';
+      div.innerHTML = `
+        <span class="w-24 font-medium">${ruName}</span>
+        <div class="flex-1 bg-[var(--secondary,#e5e7eb)] rounded-full h-2.5 overflow-hidden">
+          <div class="bg-teal-600 h-full rounded-full" style="width: ${pct}%"></div>
+        </div>
+        <span class="w-16 text-right font-semibold">${valBn} млрд</span>
+      `;
+      dowContainer.appendChild(div);
+    });
+
+    // 5. Render Low table
+    const tableLow = document.getElementById('table-low');
+    lowData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-[var(--secondary,#f9fafb)]';
+      tr.innerHTML = `
+        <td class="py-1.5 px-3 font-medium">${item.seller}</td>
+        <td class="py-1.5 px-3 text-right font-semibold text-rose-600">${item.average_income.toLocaleString()} ₽</td>
+      `;
+      tableLow.appendChild(tr);
+    });
+
+    // 6. Render Offer table
+    const tableOffer = document.getElementById('table-offer');
+    offerData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-[var(--secondary,#f9fafb)]';
+      tr.innerHTML = `
+        <td class="py-1.5 px-3 font-medium">${item.customer}</td>
+        <td class="py-1.5 px-3 text-[var(--muted-foreground,#6b7280)]">${item.sale_date}</td>
+        <td class="py-1.5 px-3 font-medium">${item.seller}</td>
+      `;
+      tableOffer.appendChild(tr);
+    });
+  </script>
+</body>
+</html>
